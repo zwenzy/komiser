@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>KOMISER — Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="login-wrap">
+      <div class="login-card" role="main" aria-labelledby="brand">
+        <div id="brand" class="brand">KOMISER</div>
+        <div class="sub">Silakan login untuk melanjutkan</div>
+
+        <form
+          id="loginForm"
+          onsubmit="return handleLogin(event)"
+          aria-label="form login"
+        >
+          <label class="sr-only" hidden for="username">Username</label>
+          <input
+            id="username"
+            class="input"
+            type="text"
+            placeholder="Username"
+            required
+            autocomplete="username"
+          />
+
+          <label class="sr-only" hidden for="password">Password</label>
+          <input
+            id="password"
+            class="input"
+            type="password"
+            placeholder="Password"
+            required
+            autocomplete="current-password"
+          />
+
+          <button class="btn" type="submit">Login</button>
+        </form>
+
+        <div class="small">
+          Belum punya akun?
+          <a
+            href="#"
+            onclick="alert('Fitur daftar belum tersedia')"
+            style="color: var(--primary); text-decoration: none"
+            >Daftar</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Simulasi login sederhana (tidak aman — hanya untuk demo lokal)
+      function handleLogin(e) {
+        e.preventDefault();
+        const u = document.getElementById("username").value.trim();
+        if (!u) return alert("Masukkan username");
+        // redirect ke dashboard — di implementasi nyata, proses login server-side
+        window.location.href = "dashboard.html";
+        return false;
+      }
+    </script>
+  </body>
+</html>

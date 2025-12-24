@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KOMISER — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-wrap">
+    <aside class="sidebar" role="navigation" aria-label="Sidebar">
+      <div class="side-brand">KOMISER</div>
+      <div style="height:8px"></div>
+      <div class="nav-item active">🏠 Dashboard</div>
+      <div class="nav-item">👥 Data Pengguna</div>
+      <div class="nav-item">📊 Laporan</div>
+      <div class="nav-item">⚙️ Pengaturan</div>
+      <div style="flex:1"></div>
+      <div class="nav-item" onclick="location.href='login.html'">🔓 Logout</div>
+    </aside>
+
+    <main class="main" role="main">
+      <div class="topbar">
+        <div class="greeting">Selamat Datang, <span style="color:var(--primary)">Amelia</span></div>
+        <div class="profile">
+          <div style="text-align:right">
+            <div style="font-weight:700">Amelia P.</div>
+            <div style="font-size:13px;color:var(--muted)">Admin</div>
+          </div>
+          <div class="avatar">A</div>
+        </div>
+      </div>
+
+      <div class="grid-cards">
+        <div class="card">
+          <h4>Total Pengguna</h4>
+          <p>1,320</p>
+        </div>
+        <div class="card">
+          <h4>Data Baru (7 hari)</h4>
+          <p>24</p>
+        </div>
+        <div class="card">
+          <h4>Aktivitas Mingguan</h4>
+          <p>87%</p>
+        </div>
+        <div class="card">
+          <h4>Pending Review</h4>
+          <p>5</p>
+        </div>
+      </div>
+
+      <section class="table-wrap" aria-labelledby="dt-title">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h3 id="dt-title" style="margin:0">Data Pengguna</h3>
+          <div>
+            <button class="btn" onclick="alert('Tambah Data - belum diimplementasikan')">+ Tambah Data</button>
+          </div>
+        </div>
+
+        <table class="table" role="table" aria-label="Tabel data pengguna">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Rina S.</td>
+              <td>rina@example.com</td>
+              <td>Aktif</td>
+              <td class="actions">
+                <button class="btn-sm edit" onclick="alert('Edit user')">Edit</button>
+                <button class="btn-sm del" onclick="confirm('Hapus user ini?') && alert('Terhapus')">Hapus</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Budi H.</td>
+              <td>budi@example.com</td>
+              <td>Non-aktif</td>
+              <td class="actions">
+                <button class="btn-sm edit" onclick="alert('Edit user')">Edit</button>
+                <button class="btn-sm del" onclick="confirm('Hapus user ini?') && alert('Terhapus')">Hapus</button>
+              </td>
+            </tr>
+            <!-- tambah baris sesuai kebutuhan -->
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // placeholder: nanti bisa fetch API untuk data dinamis
+  </script>
+</body>
+</html>

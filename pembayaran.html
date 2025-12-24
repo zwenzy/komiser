@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran - Komiser</title>
+    <style>
+        /* CSS Umum */
+        body, html {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 0; background-color: #f9f9f9; color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; } /* Dibuat sedikit lebih kecil */
+        h1, h2, h3 { margin-top: 0; }
+        .btn {
+            padding: 12px 20px; font-size: 16px; text-decoration: none;
+            border-radius: 6px; margin-left: 10px; font-weight: 500;
+            cursor: pointer; border: none;
+        }
+        .btn-primary { background-color: #3498db; color: white; }
+
+        /* Header (Logged-In) */
+        .header {
+            background-color: #ffffff; border-bottom: 1px solid #ddd; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .header .logo {
+            font-size: 24px; font-weight: bold; color: #2c3e50; text-decoration: none;
+        }
+        .header nav { display: flex; align-items: center; gap: 20px; }
+        .header nav > a { text-decoration: none; color: #555; font-weight: 500; }
+        
+        /* Dropdown Profil */
+        .profile-menu { position: relative; display: inline-block; }
+        .profile-btn { background-color: transparent; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .profile-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; }
+        .profile-btn span { font-weight: 500; color: #333; }
+        .dropdown-content { display: none; position: absolute; top: 110%; right: 0; background-color: white; min-width: 180px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 1001; overflow: hidden; }
+        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; margin: 0; }
+        .dropdown-content a:hover { background-color: #f1f1f1; }
+        .dropdown-content .divider { border-top: 1px solid #eee; margin: 5px 0; }
+        .profile-menu:hover .dropdown-content { display: block; }
+        
+        /* CSS Khusus Halaman Pembayaran */
+        .checkout-layout {
+            display: flex;
+            flex-wrap: wrap; /* Agar responsif di HP */
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .order-summary {
+            flex: 1; /* Lebar 1 bagian */
+            min-width: 280px; /* Lebar minimum */
+        }
+        .payment-methods {
+            flex: 1.5; /* Lebar 1.5 bagian (lebih lebar) */
+        }
+        
+        .summary-box, .payment-box {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        /* Detail Ringkasan */
+        .summary-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .summary-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        .summary-item .item-details h4 { margin: 0 0 5px 0; }
+        .summary-item .item-details p { margin: 0; color: #777; font-size: 14px; }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        .price-row.total {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Pilihan Metode Pembayaran */
+        .method-option {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .method-option:hover {
+            border-color: #3498db;
+        }
+        .method-option.selected {
+            border: 2px solid #3498db;
+            background-color: #f0f7ff;
+        }
+        .method-header {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .method-header input[type="radio"] {
+            margin-right: 15px;
+        }
+        .method-logos {
+            margin-top: 10px;
+            padding-left: 30px; /* Sejajar dengan teks, bukan radio button */
+            display: flex;
+            gap: 10px;
+        }
+        .method-logos img {
+            height: 25px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        
+        .btn-bayar {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-left: 0; /* Override style .btn */
+        }
+        .security-note {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 50px; background-color: #2c3e50; color: #ecf0f1;
+            padding: 40px 20px; text-align: center;
+        }
+        .footer a { color: #3498db; text-decoration: none; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="logo">KOMISER</a>
+        <nav>
+            <a href="#">Cari Proyek</a>
+            <a href="chat.html">Pesan</a>
+            <div class="profile-menu">
+                <button class="profile-btn">
+                    <img src="https://via.placeholder.com/40" alt="Foto Profil" class="profile-avatar">
+                    <span>Budi</span>
+                </button>
+                <div class="dropdown-content">
+                    <a href="dashboard.html">Dasbor Saya</a>
+                    <a href="profil.html">Profil Publik</a>
+                    <a href="#">Pengaturan Akun</a>
+                    <div class="divider"></div>
+                    <a href="index.html">Keluar (Logout)</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1 style="font-size: 28px;">Konfirmasi Pembayaran</h1>
+            
+            <div class="checkout-layout">
+                
+                <aside class="order-summary">
+                    <h2>Ringkasan Pesanan</h2>
+                    <div class="summary-box">
+                        <div class="summary-item">
+                            <img src="https://via.placeholder.com/60x60?text=Karya" alt="Jasa Desain">
+                            <div class="item-details">
+                                <h4>Jasa Desain Logo</h4>
+                                <p>dari Kreator Budi Santoso</p>
+                            </div>
+                        </div>
+                        
+                        <div class="price-row">
+                            <span>Harga Jasa</span>
+                            <span>Rp 1.000.000</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Biaya Admin (5%)</span>
+                            <span>Rp 50.000</span>
+                        </div>
+                        
+                        <div class="price-row total">
+                            <span>Total Pembayaran</span>
+                            <span>Rp 1.050.000</span>
+                        </div>
+                    </div>
+                    <p style="font-size: 13px; color: #777; margin-top: 15px;">
+                        Dana Anda akan ditahan oleh Komiser (sistem escrow) dan baru akan diteruskan ke kreator setelah Anda menyetujui hasil akhir pekerjaan.
+                    </p>
+                </aside>
+                
+                <section class="payment-methods">
+                    <h2>Metode Pembayaran</h2>
+                    <div class="payment-box">
+                        
+                        <div class="method-option selected">
+                            <div class="method-header">
+                                <input type="radio" id="va" name="payment_method" value="va" checked>
+                                <label for="va">Virtual Account (VA)</label>
+                            </div>
+                            <div class="method-logos">
+                                <img src="https://via.placeholder.com/50x25?text=BCA" alt="BCA">
+                                <img src="https://via.placeholder.com/50x25?text=Mandiri" alt="Mandiri">
+                                <img src="https://via.placeholder.com/50x25?text=BNI" alt="BNI">
+                            </div>
+                        </div>
+                        
+                        <div class="method-option">
+                            <div class="method-header">
+                                <input type="radio" id="ewallet" name="payment_method" value="ewallet">
+                                <label for="ewallet">E-Wallet</label>
+                            </div>
+                            <div class="method-logos">
+                                <img src="https://via.placeholder.com/50x25?text=GoPay" alt="GoPay">
+                                <img src="https://via.placeholder.com/50x25?text=OVO" alt="OVO">
+                                <img src="https://via.placeholder.com/50x25?text=ShopeePay" alt="ShopeePay">
+                            </div>
+                        </div>
+                        
+                        <div class="method-option">
+                            <div class="method-header">
+                                <input type="radio" id="cc" name="payment_method" value="cc">
+                                <label for="cc">Kartu Kredit / Debit</label>
+                            </div>
+                            <div class="method-logos">
+                                <img src="https://via.placeholder.com/50x25?text=VISA" alt="VISA">
+                                <img src="https://via.placeholder.com/50x25?text=MasterCard" alt="MasterCard">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <a href="#" class="btn btn-primary btn-bayar">Bayar Sekarang</a>
+                    <p class="security-note">🔒 Pembayaran Anda aman dan terenkripsi.</p>
+                </section>
+                
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p><a href="#">Tentang Kami</a> | <a href="#">Bantuan</a> | <a href="#">Kebijakan Privasi</a></p>
+        <p>© 2025 Komiser. Dibuat dengan ❤️ di Indonesia.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.method-option').forEach(item => {
+            item.addEventListener('click', event => {
+                // Hapus 'selected' dari semua
+                document.querySelectorAll('.method-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Tambahkan 'selected' ke yang diklik
+                item.classList.add('selected');
+                
+                // Pilih radio button di dalamnya
+                item.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+    </script>
+
+</body>
+</html>
