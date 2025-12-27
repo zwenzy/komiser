@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>KOMISER — Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>KOMISER — Daftar Akun</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="brand">KOMISER</div>
+        <div class="sub">Buat akun baru</div>
+
+        <form id="registerForm">
+          <input id="regName" class="input" type="text" placeholder="Nama Lengkap (Profile)" required />
+          <input id="regUser" class="input" type="text" placeholder="Username" required />
+          <input id="regPass" class="input" type="password" placeholder="Password" required />
+          
+          <button class="btn" type="submit">Daftar Sekarang</button>
+        </form>
+
+        <div class="small">
+          Sudah punya akun? 
+          <a href="login.html" style="color: var(--primary); text-decoration: none">Login</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const regForm = document.getElementById('registerForm');
+
+      regForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const nama = document.getElementById('regName').value;
+        const user = document.getElementById('regUser').value;
+        const pass = document.getElementById('regPass').value;
+
+        // 1. SIMPAN DATA KE "DATABASE" BROWSER
+        localStorage.setItem('storedUser', user);
+        localStorage.setItem('storedPass', pass);
+        localStorage.setItem('storedName', nama); // Ini buat profil nanti
+
+        alert("Registrasi Berhasil! Silakan Login.");
+        window.location.href = "login.html";
+      });
+    </script>
+</body>
+</html>
+</html>

@@ -4,31 +4,52 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KOMISER — Dashboard</title>
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/src/style.css">
+
+  <script>
+    // Cek tiket login di browser
+    const isLogged = localStorage.getItem('isLoggedIn');
+    
+    // Kalau tiket gak ada, tendang ke login page
+    if (!isLogged) {
+        alert("Eits, login dulu dong bos!");
+        window.location.href = "login.html";
+    }
+  </script>
 </head>
 <body>
   <div class="app-wrap">
+    
     <aside class="sidebar" role="navigation" aria-label="Sidebar">
       <div class="side-brand">KOMISER</div>
       <div style="height:8px"></div>
+      
       <div class="nav-item active">🏠 Dashboard</div>
-      <div class="nav-item">👥 Data Pengguna</div>
-      <div class="nav-item">📊 Laporan</div>
-      <div class="nav-item">⚙️ Pengaturan</div>
+      <div class="nav-item" onclick="alert('Menu Data Pengguna')">👥 Data Pengguna</div>
+      <div class="nav-item" onclick="alert('Menu Laporan')">📊 Laporan</div>
+      <div class="nav-item" onclick="alert('Menu Pengaturan')">⚙️ Pengaturan</div>
+      
       <div style="flex:1"></div>
-      <div class="nav-item" onclick="location.href='login.html'">🔓 Logout</div>
+      
+      <div class="nav-item" id="btnLogout" style="cursor: pointer; color: #ff6b6b;">
+        🔓 Logout
+      </div>
     </aside>
 
     <main class="main" role="main">
       <div class="topbar">
-        <div class="greeting">Selamat Datang, <span style="color:var(--primary)">Amelia</span></div>
+        <div class="greeting">
+            Selamat Datang, <span id="userNameDisplay" style="color:var(--primary); font-weight:bold;">User</span>
+        </div>
+        
         <div class="profile">
           <div style="text-align:right">
-            <div style="font-weight:700">Amelia P.</div>
-            <div style="font-size:13px;color:var(--muted)">Admin</div>
+            <div style="font-weight:700" id="userNameProfile">User</div>
+            <div style="font-size:13px;color:var(--muted)">Admin Access</div>
           </div>
-          <div class="avatar">A</div>
+          <div class="avatar" id="userAvatar">U</div>
         </div>
       </div>
 
@@ -55,7 +76,7 @@
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
           <h3 id="dt-title" style="margin:0">Data Pengguna</h3>
           <div>
-            <button class="btn" onclick="alert('Tambah Data - belum diimplementasikan')">+ Tambah Data</button>
+            <button class="btn" onclick="tambahDataPalsu()">+ Tambah Data</button>
           </div>
         </div>
 
@@ -69,28 +90,27 @@
               <th>Aksi</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tableBody">
             <tr>
               <td>1</td>
               <td>Rina S.</td>
               <td>rina@example.com</td>
-              <td>Aktif</td>
+              <td><span style="color: green; font-weight: bold;">Aktif</span></td>
               <td class="actions">
-                <button class="btn-sm edit" onclick="alert('Edit user')">Edit</button>
-                <button class="btn-sm del" onclick="confirm('Hapus user ini?') && alert('Terhapus')">Hapus</button>
+                <button class="btn-sm edit" onclick="alert('Edit Rina?')">Edit</button>
+                <button class="btn-sm del" onclick="hapusBaris(this)">Hapus</button>
               </td>
             </tr>
             <tr>
               <td>2</td>
               <td>Budi H.</td>
               <td>budi@example.com</td>
-              <td>Non-aktif</td>
+              <td><span style="color: red; font-weight: bold;">Non-aktif</span></td>
               <td class="actions">
-                <button class="btn-sm edit" onclick="alert('Edit user')">Edit</button>
-                <button class="btn-sm del" onclick="confirm('Hapus user ini?') && alert('Terhapus')">Hapus</button>
+                <button class="btn-sm edit" onclick="alert('Edit Budi?')">Edit</button>
+                <button class="btn-sm del" onclick="hapusBaris(this)">Hapus</button>
               </td>
             </tr>
-            <!-- tambah baris sesuai kebutuhan -->
           </tbody>
         </table>
       </section>
@@ -99,10 +119,58 @@
   </div>
 
   <script>
-    // placeholder: nanti bisa fetch API untuk data dinamis
+    // 1. TAMPILKAN NAMA USER DARI LOCALSTORAGE
+    // Kalau gak ada data nama, defaultnya 'Tamu'
+    const currentUser = localStorage.getItem('currentUser') || 'Tamu';
+    
+    // Update teks di halaman
+    document.getElementById('userNameDisplay').textContent = currentUser;
+    document.getElementById('userNameProfile').textContent = currentUser;
+    
+    // Update Avatar (Huruf Depan Nama)
+    const inisial = currentUser.charAt(0).toUpperCase();
+    document.getElementById('userAvatar').textContent = inisial;
+
+    // 2. FITUR LOGOUT
+    document.getElementById('btnLogout').addEventListener('click', function() {
+        if(confirm("Yakin mau logout?")) {
+            // Hapus tiket login
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            // Balik ke login page
+            window.location.href = "login.html";
+        }
+    });
+
+    // 3. FITUR HAPUS BARIS (BIAR DEMO KELIHATAN HIDUP)
+    function hapusBaris(button) {
+        if(confirm("Yakin hapus data ini?")) {
+            // Hapus baris <tr> induk dari tombol ini
+            const row = button.closest('tr');
+            row.remove();
+        }
+    }
+
+    // 4. FITUR TAMBAH DATA (SIMULASI)
+    function tambahDataPalsu() {
+        const table = document.getElementById('tableBody');
+        const rowCount = table.rows.length + 1;
+        
+        const newRow = `
+            <tr>
+              <td>${rowCount}</td>
+              <td>User Baru ${rowCount}</td>
+              <td>user${rowCount}@demo.com</td>
+              <td>Aktif</td>
+              <td class="actions">
+                <button class="btn-sm edit" onclick="alert('Edit?')">Edit</button>
+                <button class="btn-sm del" onclick="hapusBaris(this)">Hapus</button>
+              </td>
+            </tr>
+        `;
+        // Masukkan HTML baru ke dalam tabel
+        table.insertAdjacentHTML('beforeend', newRow);
+    }
   </script>
 </body>
 </html>
-<link rel="stylesheet" href="/src/style.css"> 
-
-<script type="module" src="/src/main.js"></script>

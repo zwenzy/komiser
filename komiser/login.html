@@ -8,7 +8,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <div class="login-wrap">
@@ -16,17 +16,17 @@
         <div id="brand" class="brand">KOMISER</div>
         <div class="sub">Silakan login untuk melanjutkan</div>
 
-        <form
-          id="loginForm"
-          onsubmit="return handleLogin(event)"
-          aria-label="form login"
-        >
+        <div id="errorMsg" style="color: red; font-size: 14px; margin-bottom: 10px; display: none; text-align: center;">
+          Username atau Password salah!
+        </div>
+
+        <form id="loginForm">
           <label class="sr-only" hidden for="username">Username</label>
           <input
             id="username"
             class="input"
             type="text"
-            placeholder="Username"
+            placeholder="Username (admin)"
             required
             autocomplete="username"
           />
@@ -36,7 +36,7 @@
             id="password"
             class="input"
             type="password"
-            placeholder="Password"
+            placeholder="Password (12345)"
             required
             autocomplete="current-password"
           />
@@ -47,8 +47,8 @@
         <div class="small">
           Belum punya akun?
           <a
-            href="#"
-            onclick="alert('Fitur daftar belum tersedia')"
+            href="register.html"
+            onclick="alert('Fitur daftar belum tersedia untuk Demo')"
             style="color: var(--primary); text-decoration: none"
             >Daftar</a
           >
@@ -57,18 +57,50 @@
     </div>
 
     <script>
-      // Simulasi login sederhana (tidak aman — hanya untuk demo lokal)
-      function handleLogin(e) {
-        e.preventDefault();
-        const u = document.getElementById("username").value.trim();
-        if (!u) return alert("Masukkan username");
-        // redirect ke dashboard — di implementasi nyata, proses login server-side
+  const loginForm = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('errorMsg');
+
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault(); 
+    
+    const u = document.getElementById("username").value.trim();
+    const p = document.getElementById("password").value.trim();
+
+    // AMBIL DATA DARI "DATABASE" PALSU
+    const registeredUser = localStorage.getItem('storedUser');
+    const registeredPass = localStorage.getItem('storedPass');
+
+    // CEK: Apakah cocok sama Admin ATAU User yang baru daftar?
+    const isAdmin = (u === "admin" && p === "12345");
+    const isUserBaru = (u === registeredUser && p === registeredPass);
+
+    if (isAdmin || isUserBaru) {
+        // Simpan Tiket Login
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        // Simpan Nama yang Login (Kalau admin pake 'Admin', kalau user pake nama aslinya)
+        const displayName = isAdmin ? 'Administrator' : localStorage.getItem('storedName');
+        localStorage.setItem('currentUser', displayName);
+
         window.location.href = "dashboard.html";
-        return false;
+    } else {
+        errorMsg.style.display = 'block';
+    }
+  });
+
+  // Ganti link "Daftar" di HTML login biar ngarah ke register.html
+  // Cari <a href="#">Daftar</a> ganti jadi <a href="register.html">Daftar</a>
+</script>
+
+    <style>
+      /* Animasi getar kalau salah password */
+      @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
       }
-    </script>
+    </style>
   </body>
 </html>
-<link rel="stylesheet" href="/src/style.css"> 
-
-<script type="module" src="/src/main.js"></script>
