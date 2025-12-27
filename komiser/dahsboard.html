@@ -9,12 +9,10 @@
   <link rel="stylesheet" href="/src/style.css">
 
   <script>
-    // Cek tiket login di browser
     const isLogged = localStorage.getItem('isLoggedIn');
     
-    // Kalau tiket gak ada, tendang ke login page
     if (!isLogged) {
-        alert("Eits, login dulu dong bos!");
+        alert("Harap login terlebih dahulu.");
         window.location.href = "login.html";
     }
   </script>
