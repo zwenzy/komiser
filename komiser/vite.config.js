@@ -1,7 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        // Daftarin semua halaman kamu di sini:
+        main: resolve(__dirname, 'indexs.html'),
+        login: resolve(__dirname, 'login.html'),
+        dashboard: resolve(__dirname, 'dashboard.html'),
+        chat: resolve(__dirname, 'chat.html'),
+        pembayaran: resolve(__dirname, 'pembayaran.html'),
+        // Kalau ada lagi, tambah di bawah sini...
+      },
+    },
+  },
 })
